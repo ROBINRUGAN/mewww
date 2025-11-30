@@ -1,100 +1,30 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { SymbolView } from 'expo-symbols';
 import { StatCardData } from '../../types/dashboard';
 
 const StatCard: React.FC<StatCardData> = ({ title, value, unit, icon, color, subtext, fullWidth }) => (
-    <View style={[styles.statCard, fullWidth && styles.fullWidthCard]}>
-        <View style={styles.statHeader}>
-            <View style={[styles.iconCircle, { backgroundColor: color }]}>
+    <View className={`rounded-2xl p-4 shadow-sm ${fullWidth ? 'w-full mt-3' : ''} bg-card`}>
+        <View className="flex-row items-center mb-3">
+            <View className="w-8 h-8 rounded-full items-center justify-center mr-3" style={{ backgroundColor: color }}>
                 <SymbolView name={icon} tintColor="#FFF" style={{ width: 18, height: 18 }} />
             </View>
-            <Text style={styles.statTitle}>{title}</Text>
-            {fullWidth && <Text style={styles.statMeta}>{subtext}</Text>}
+            <Text className="text-sm font-semibold text-primary flex-1">{title}</Text>
+            {fullWidth && <Text className="text-secondary">{subtext}</Text>}
         </View>
-        <View style={styles.statBody}>
-            <Text style={styles.statValue}>
+        <View>
+            <Text className="text-3xl font-bold text-primary">
                 {value}
-                <Text style={styles.statUnit}>{unit}</Text>
+                <Text className="text-base text-secondary font-medium">{unit}</Text>
             </Text>
-            {!fullWidth && <Text style={styles.statSub}>{subtext}</Text>}
+            {!fullWidth && <Text className="text-xs text-secondary mt-2">{subtext}</Text>}
         </View>
         {fullWidth && (
-            <View style={styles.progressBarBg}>
-                <View style={[styles.progressBarFill, { width: '68%' }]} />
+            <View className="h-2 bg-slate-200 dark:bg-slate-800 rounded-full mt-3 overflow-hidden">
+                <View className="h-full bg-accent-success rounded-full w-[68%]" />
             </View>
         )}
     </View>
 );
 
-const styles = StyleSheet.create({
-    statCard: {
-        backgroundColor: '#FFF',
-        borderRadius: 20,
-        padding: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-    },
-    fullWidthCard: {
-        width: '100%',
-        marginTop: 12,
-    },
-    statHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    statMeta: {
-        marginLeft: 'auto',
-        color: '#8E8E93',
-    },
-    iconCircle: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 8,
-    },
-    statTitle: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#333',
-    },
-    statBody: {
-        marginTop: 4,
-    },
-    statValue: {
-        fontSize: 28,
-        fontWeight: '700',
-        color: '#000',
-    },
-    statUnit: {
-        fontSize: 14,
-        color: '#8E8E93',
-        fontWeight: '500',
-    },
-    statSub: {
-        fontSize: 12,
-        color: '#8E8E93',
-        marginTop: 4,
-    },
-    progressBarBg: {
-        height: 8,
-        backgroundColor: '#F2F2F7',
-        borderRadius: 4,
-        marginTop: 10,
-        width: '100%',
-        overflow: 'hidden',
-    },
-    progressBarFill: {
-        height: '100%',
-        backgroundColor: '#34C759',
-        borderRadius: 4,
-    },
-});
-
 export default StatCard;
-

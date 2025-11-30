@@ -10,7 +10,7 @@ const ProfileTabs: React.FC<Props> = ({ posts, renderPost }) => (
     <Tabs.FlashList
         data={posts}
         renderItem={({ item }) => renderPost(item)}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerClassName="pb-24"
     />
 );
 

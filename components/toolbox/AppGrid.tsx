@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { SymbolView } from 'expo-symbols';
 import * as Haptics from 'expo-haptics';
 import type { SymbolName } from '../../types/symbols';
@@ -16,56 +16,22 @@ interface Props {
 }
 
 const AppGrid: React.FC<Props> = ({ apps }) => (
-    <View style={styles.toolsContainer}>
-        <View style={styles.toolsGrid}>
+    <View className="px-5 mb-6">
+        <View className="flex-row bg-card rounded-2xl p-5 justify-between shadow-sm">
             {apps.map((app) => (
                 <TouchableOpacity
                     key={app.id}
-                    style={styles.appItem}
+                    className="items-center gap-2"
                     onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
                 >
-                    <View style={[styles.appIconBg, { backgroundColor: app.color }]}>
+                    <View className="w-14 h-14 rounded-xl items-center justify-center" style={{ backgroundColor: app.color }}>
                         <SymbolView name={app.icon} tintColor="#FFF" style={{ width: 28, height: 28 }} />
                     </View>
-                    <Text style={styles.appName}>{app.name}</Text>
+                    <Text className="text-xs font-medium text-primary text-center">{app.name}</Text>
                 </TouchableOpacity>
             ))}
         </View>
     </View>
 );
-
-const styles = StyleSheet.create({
-    toolsContainer: {
-        paddingHorizontal: 20,
-        marginBottom: 24,
-    },
-    toolsGrid: {
-        flexDirection: 'row',
-        backgroundColor: '#FFF',
-        borderRadius: 16,
-        padding: 20,
-        justifyContent: 'space-between',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 5,
-    },
-    appItem: {
-        alignItems: 'center',
-        gap: 8,
-    },
-    appIconBg: {
-        width: 56,
-        height: 56,
-        borderRadius: 14,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    appName: {
-        fontSize: 12,
-        color: '#000',
-        fontWeight: '500',
-    },
-});
 
 export default AppGrid;

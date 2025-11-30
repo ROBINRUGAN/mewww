@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, Switch } from 'react-native';
 import { SymbolView } from 'expo-symbols';
 import * as Haptics from 'expo-haptics';
 import type { SymbolName } from '../../types/symbols';
@@ -24,20 +24,20 @@ const SettingRow: React.FC<Props> = ({ icon, color, label, value, type = 'arrow'
 
     return (
         <TouchableOpacity
-            style={[styles.settingRow, isLast && styles.lastRow]}
+            className={`flex-row items-center py-3 pl-4 bg-card border-b border-border ${isLast ? 'border-b-0' : ''}`}
             onPress={() => type !== 'switch' && Haptics.selectionAsync()}
             activeOpacity={type === 'switch' ? 1 : 0.7}
         >
-            <View style={[styles.iconContainer, { backgroundColor: color }]}>
+            <View className="w-7 h-7 rounded-md items-center justify-center mr-3" style={{ backgroundColor: color }}>
                 <SymbolView name={icon} tintColor="#FFF" style={{ width: 18, height: 18 }} />
             </View>
-            <Text style={styles.settingLabel}>{label}</Text>
-            <View style={styles.settingRight}>
+            <Text className="text-[17px] text-primary flex-1">{label}</Text>
+            <View className="flex-row items-center pr-4 gap-1.5">
                 {type === 'switch' ? (
                     <Switch value={isEnabled} onValueChange={handleToggle} />
                 ) : (
                     <>
-                        <Text style={styles.settingValue}>{value}</Text>
+                        <Text className="text-[17px] text-secondary">{value}</Text>
                         <SymbolView name="chevron.right" tintColor="#C7C7CC" style={{ width: 16, height: 16 }} />
                     </>
                 )}
@@ -45,43 +45,5 @@ const SettingRow: React.FC<Props> = ({ icon, color, label, value, type = 'arrow'
         </TouchableOpacity>
     );
 };
-
-const styles = StyleSheet.create({
-    settingRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 12,
-        paddingLeft: 16,
-        backgroundColor: '#FFF',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#C6C6C8',
-    },
-    lastRow: {
-        borderBottomWidth: 0,
-    },
-    iconContainer: {
-        width: 28,
-        height: 28,
-        borderRadius: 6,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 12,
-    },
-    settingLabel: {
-        fontSize: 17,
-        color: '#000',
-        flex: 1,
-    },
-    settingRight: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingRight: 16,
-        gap: 6,
-    },
-    settingValue: {
-        fontSize: 17,
-        color: '#8E8E93',
-    },
-});
 
 export default SettingRow;

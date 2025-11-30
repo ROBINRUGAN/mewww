@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import {View, Text, ScrollView, Dimensions, StatusBar, useColorScheme} from 'react-native';
 import { Stack } from 'expo-router';
 import React from 'react';
 
@@ -13,8 +13,9 @@ const CARD_GAP = 12;
 const CARD_WIDTH = (width - 32 - CARD_GAP) / 2;
 
 export default function DashboardScreen() {
+    const colorScheme = useColorScheme(); // 获取当前系统主题
     return (
-        <View style={styles.container}>
+        <View className="flex-1 bg-surface">
             <Stack.Screen
                 options={{
                     title: 'Dashboard',
@@ -24,67 +25,45 @@ export default function DashboardScreen() {
                 }}
             />
 
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={styles.scrollContent}>
+            {/* 动态设置状态栏：
+                    - 如果是深色模式 (dark)，文字设为白色 (light-content)
+                    - 如果是浅色模式 (light)，文字设为黑色 (dark-content)
+                */}
+            <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
+
+
+            <ScrollView
+                contentInsetAdjustmentBehavior="automatic"
+                contentContainerStyle={{ paddingTop: 16 }}
+            >
                 <WeatherCard />
 
-                <Text style={styles.sectionHeader}>Quick Actions</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.shortcutRow} contentContainerStyle={styles.shortcutContent}>
+                <Text className="text-xl font-bold text-primary ml-4 mb-2 mt-6">Quick Actions</Text>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    className="flex-grow-0"
+                    contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
+                >
                     {SHORTCUTS.map((item) => (
                         <ShortcutButton key={item.label} {...item} />
                     ))}
                 </ScrollView>
 
-                <Text style={styles.sectionHeader}>Overview</Text>
-                <View style={styles.gridContainer}>
+                <Text className="text-xl font-bold text-primary ml-4 mb-2 mt-6">Overview</Text>
+                <View className="flex-row flex-wrap px-4 gap-3">
                     {STAT_CARDS.map((card) => (
-                        <View key={card.title} style={[styles.statWrapper, card.fullWidth && styles.fullWidthWrapper]}>
+                        <View key={card.title} style={{ width: CARD_WIDTH }} className={card.fullWidth ? 'w-full' : ''}>
                             <StatCard {...card} />
                         </View>
                     ))}
                 </View>
 
-                <Text style={styles.sectionHeader}>Up Next</Text>
+                <Text className="text-xl font-bold text-primary ml-4 mb-2 mt-6">Up Next</Text>
                 <TodoList todos={TODO_ITEMS} />
 
-                <View style={{ height: 100 }} />
+                <View className="h-24" />
             </ScrollView>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F2F2F7',
-    },
-    scrollContent: {
-        paddingTop: 16,
-    },
-    sectionHeader: {
-        fontSize: 20,
-        fontWeight: '700',
-        color: '#000',
-        marginLeft: 16,
-        marginBottom: 10,
-        marginTop: 24,
-    },
-    shortcutRow: {
-        flexGrow: 0,
-    },
-    shortcutContent: {
-        paddingHorizontal: 16,
-        gap: 12,
-    },
-    gridContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        paddingHorizontal: 16,
-        gap: CARD_GAP,
-    },
-    statWrapper: {
-        width: CARD_WIDTH,
-    },
-    fullWidthWrapper: {
-        width: '100%',
-    },
-});

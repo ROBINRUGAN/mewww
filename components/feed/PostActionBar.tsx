@@ -1,61 +1,73 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
     comments: number;
     retweets: number;
     likes: number;
+    views?: number;
     liked: boolean;
     onLike: () => void;
 }
 
-const PostActionBar: React.FC<Props> = ({ comments, retweets, likes, liked, onLike }) => {
+const ActionButton = ({ icon, count, color, active, onPress }: any) => (
+    <TouchableOpacity
+        className="flex-row items-center min-w-[50px]"
+        onPress={onPress}
+        activeOpacity={0.6}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+    >
+        <Ionicons
+            name={icon}
+            size={18}
+            color={active ? color : '#8E8E93'}
+            style={{ marginTop: 2 }}
+        />
+        {count > 0 && (
+            <Text className={`text-[13px] ml-1.5 font-medium ${active ? '' : 'text-gray-500'}`} style={active ? { color } : {}}>
+                {count}
+            </Text>
+        )}
+    </TouchableOpacity>
+);
+
+const PostActionBar: React.FC<Props> = ({ comments, retweets, likes, views = 842, liked, onLike }) => {
     return (
-        <View style={styles.actionBar}>
-            <TouchableOpacity style={styles.actionBtn}>
-                <Ionicons name="chatbubble-outline" size={18} color="#8E8E93" />
-                <Text style={styles.actionCount}>{comments}</Text>
-            </TouchableOpacity>
+        <View className="flex-row items-center mt-3 pr-4">
+            {/* 左侧四个按钮区域：占满剩余空间，但右侧留出 mr-8 的距离给分享按钮 */}
+            <View className="flex-1 flex-row justify-between mr-8">
+                <ActionButton
+                    icon="chatbubble-outline"
+                    count={comments}
+                    onPress={() => {}}
+                />
+                <ActionButton
+                    icon="repeat-outline"
+                    count={retweets}
+                    color="#00BA7C"
+                    onPress={() => {}}
+                />
+                <ActionButton
+                    icon={liked ? "heart" : "heart-outline"}
+                    count={likes}
+                    color="#F91880"
+                    active={liked}
+                    onPress={onLike}
+                />
+                <ActionButton
+                    icon="stats-chart-outline"
+                    count={views}
+                    onPress={() => {}}
+                />
+            </View>
 
-            <TouchableOpacity style={styles.actionBtn}>
-                <Ionicons name="repeat-outline" size={20} color="#8E8E93" />
-                <Text style={styles.actionCount}>{retweets}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.actionBtn} onPress={onLike}>
-                <Ionicons name={liked ? 'heart' : 'heart-outline'} size={18} color={liked ? '#FF2D55' : '#8E8E93'} />
-                <Text style={[styles.actionCount, liked && { color: '#FF2D55' }]}>
-                    {liked ? likes + 1 : likes}
-                </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.actionBtn}>
+            {/* 分享按钮：独立在右侧 */}
+            <TouchableOpacity hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}>
                 <Ionicons name="share-outline" size={18} color="#8E8E93" />
             </TouchableOpacity>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    actionBar: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingRight: 40,
-        marginTop: 4,
-        marginBottom: 8,
-    },
-    actionBtn: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 6,
-    },
-    actionCount: {
-        fontSize: 12,
-        color: '#8E8E93',
-        marginLeft: 4,
-    },
-});
-
 export default PostActionBar;
-

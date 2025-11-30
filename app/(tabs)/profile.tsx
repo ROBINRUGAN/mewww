@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, Text, useColorScheme, StatusBar} from 'react-native';
 import {Stack} from 'expo-router';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Tabs, MaterialTabBar} from 'react-native-collapsible-tab-view';
@@ -84,13 +84,14 @@ const EMPTY_STATES: Record<string, {icon: SymbolName; text: string}> = {
 
 export default function ProfileScreen() {
     const insets = useSafeAreaInsets();
+    const colorScheme = useColorScheme(); // 获取当前系统主题
 
     const renderTabBar = React.useCallback((props: any) => (
         <MaterialTabBar
             {...props}
-            indicatorStyle={{backgroundColor: '#007AFF', height: 2}}
-            style={{backgroundColor: 'white', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#E5E5EA'}}
-            labelStyle={{color: 'black', fontWeight: '600', fontSize: 14, textTransform: 'capitalize'}}
+            indicatorClassName="bg-accent-primary h-0.5"
+            className="bg-card border-b border-border"
+            labelClassName="text-primary font-semibold text-sm capitalize"
             activeColor="#000"
             inactiveColor="#8E8E93"
             tabStyle={{height: 48}}
@@ -98,7 +99,7 @@ export default function ProfileScreen() {
     ), []);
 
     return (
-        <View style={[styles.container, {paddingTop: insets.top}]}>
+        <View className="flex-1 bg-surface" style={{paddingTop: insets.top}}>
             <Stack.Screen
                 options={{
                     headerLargeTitle: false,
@@ -106,6 +107,13 @@ export default function ProfileScreen() {
                     headerStyle: {backgroundColor: '#fff'},
                 }}
             />
+
+            {/* 动态设置状态栏：
+                - 如果是深色模式 (dark)，文字设为白色 (light-content)
+                - 如果是浅色模式 (light)，文字设为黑色 (dark-content)
+            */}
+            <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}/>
+
 
             {/* 核心容器 */}
             <Tabs.Container
@@ -119,51 +127,18 @@ export default function ProfileScreen() {
                     <ProfileTabs posts={MOCK_POSTS} renderPost={(item: PostItem) => <PostRow item={item} />}/>
                 </Tabs.Tab>
                 <Tabs.Tab name="Replies">
-                    <Tabs.ScrollView contentContainerStyle={styles.centerPage}>
+                    <Tabs.ScrollView contentContainerClassName="flex-1 items-center pt-24">
                         <SymbolView name={EMPTY_STATES.Replies.icon} tintColor="#8E8E93" style={{width: 50, height: 50}}/>
-                        <Text style={styles.emptyText}>{EMPTY_STATES.Replies.text}</Text>
+                        <Text className="mt-3 text-secondary text-base">{EMPTY_STATES.Replies.text}</Text>
                     </Tabs.ScrollView>
                 </Tabs.Tab>
                 <Tabs.Tab name="Likes">
-                    <Tabs.ScrollView contentContainerStyle={styles.centerPage}>
+                    <Tabs.ScrollView contentContainerClassName="flex-1 items-center pt-24">
                         <SymbolView name={EMPTY_STATES.Likes.icon} tintColor="#8E8E93" style={{width: 50, height: 50}}/>
-                        <Text style={styles.emptyText}>{EMPTY_STATES.Likes.text}</Text>
+                        <Text className="mt-3 text-secondary text-base">{EMPTY_STATES.Likes.text}</Text>
                     </Tabs.ScrollView>
                 </Tabs.Tab>
             </Tabs.Container>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {flex: 1, backgroundColor: '#fff'},
-
-    // 空状态样式
-    centerPage: {flex: 1, alignItems: 'center', paddingTop: 100},
-    emptyText: {marginTop: 10, color: '#8E8E93', fontSize: 15},
-
-    // Post Card 样式 (复用)
-    postContainer: {
-        flexDirection: 'row',
-        padding: 16,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#E5E5EA'
-    },
-    leftCol: {marginRight: 12},
-    postAvatar: {width: 44, height: 44, borderRadius: 22, backgroundColor: '#eee'},
-    rightCol: {flex: 1},
-    headerRow: {flexDirection: 'row', marginBottom: 4, alignItems: 'center'},
-    userName: {fontWeight: '700', fontSize: 15, marginRight: 5, color: '#000'},
-    userHandle: {color: '#657786', fontSize: 15, flex: 1},
-    postText: {fontSize: 15, lineHeight: 22, color: '#14171A', marginBottom: 8},
-    postImage: {
-        width: '100%',
-        aspectRatio: 16 / 9,
-        borderRadius: 12,
-        marginBottom: 8,
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: 'rgba(0,0,0,0.1)',
-        backgroundColor: '#f0f0f0'
-    },
-    actionBar: {flexDirection: 'row', justifyContent: 'space-between', paddingRight: 40, marginTop: 4},
-});

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
 import * as Haptics from 'expo-haptics';
@@ -21,80 +21,41 @@ interface Props {
 }
 
 const ProfileHeader: React.FC<Props> = ({ user }) => (
-    <View style={styles.headerContainer}>
-        <View style={styles.topSection}>
-            <Image source={{ uri: user.avatar }} style={styles.avatar} contentFit="cover" />
-            <View style={styles.statsRow}>
-                <View style={styles.statItem}>
-                    <Text style={styles.statNum}>{user.stats.posts}</Text>
-                    <Text style={styles.statLabel}>Posts</Text>
+    <View className="pt-2 bg-card pb-3">
+        <View className="flex-row items-center px-4 mb-3">
+            <Image source={{ uri: user.avatar }} className="w-20 h-20 rounded-full border border-border bg-slate-200" contentFit="cover" />
+            <View className="flex-1 flex-row justify-around ml-3">
+                <View className="items-center">
+                    <Text className="text-lg font-bold text-primary">{user.stats.posts}</Text>
+                    <Text className="text-xs text-secondary mt-0.5">Posts</Text>
                 </View>
-                <View style={styles.statItem}>
-                    <Text style={styles.statNum}>{user.stats.followers}</Text>
-                    <Text style={styles.statLabel}>Followers</Text>
+                <View className="items-center">
+                    <Text className="text-lg font-bold text-primary">{user.stats.followers}</Text>
+                    <Text className="text-xs text-secondary mt-0.5">Followers</Text>
                 </View>
-                <View style={styles.statItem}>
-                    <Text style={styles.statNum}>{user.stats.following}</Text>
-                    <Text style={styles.statLabel}>Following</Text>
+                <View className="items-center">
+                    <Text className="text-lg font-bold text-primary">{user.stats.following}</Text>
+                    <Text className="text-xs text-secondary mt-0.5">Following</Text>
                 </View>
             </View>
         </View>
-        <View style={styles.bioSection}>
-            <Text style={styles.nameText}>{user.name}</Text>
-            <Text style={styles.handleText}>{user.handle}</Text>
-            <Text style={styles.bioText}>{user.bio}</Text>
+        <View className="px-4 mb-4">
+            <Text className="text-base font-semibold text-primary">{user.name}</Text>
+            <Text className="text-sm text-accent-primary mb-1">{user.handle}</Text>
+            <Text className="text-sm text-primary leading-5 whitespace-pre-line">{user.bio}</Text>
         </View>
-        <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.grayButton} onPress={() => Haptics.selectionAsync()}>
-                <Text style={styles.buttonText}>Edit Profile</Text>
+        <View className="flex-row px-4 gap-2">
+            <TouchableOpacity className="flex-1 bg-border/60 dark:bg-border/40 py-2 rounded-lg items-center" onPress={() => Haptics.selectionAsync()}>
+                <Text className="font-semibold text-primary">Edit Profile</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.grayButton} onPress={() => Haptics.selectionAsync()}>
-                <Text style={styles.buttonText}>Share Profile</Text>
+            <TouchableOpacity className="flex-1 bg-border/60 dark:bg-border/40 py-2 rounded-lg items-center" onPress={() => Haptics.selectionAsync()}>
+                <Text className="font-semibold text-primary">Share Profile</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity className="w-10 bg-border/60 dark:bg-border/40 rounded-lg items-center justify-center">
                 <SymbolView name="person.badge.plus" tintColor="#000" style={{ width: 20, height: 20 }} />
             </TouchableOpacity>
         </View>
     </View>
 );
-
-const styles = StyleSheet.create({
-    headerContainer: { paddingTop: 10, backgroundColor: '#fff', paddingBottom: 10 },
-    topSection: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, marginBottom: 12 },
-    avatar: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        borderWidth: 1,
-        borderColor: '#E5E5EA',
-        backgroundColor: '#f0f0f0',
-    },
-    statsRow: { flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginLeft: 12 },
-    statItem: { alignItems: 'center' },
-    statNum: { fontSize: 18, fontWeight: '700', color: '#000' },
-    statLabel: { fontSize: 13, color: '#000', marginTop: 2 },
-    bioSection: { paddingHorizontal: 16, marginBottom: 16 },
-    nameText: { fontSize: 16, fontWeight: '700', color: '#000' },
-    handleText: { fontSize: 14, color: '#007AFF', marginBottom: 4 },
-    bioText: { fontSize: 14, color: '#000', lineHeight: 20 },
-    buttonRow: { flexDirection: 'row', paddingHorizontal: 16, gap: 8 },
-    grayButton: {
-        flex: 1,
-        backgroundColor: '#E5E5EA',
-        paddingVertical: 8,
-        borderRadius: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    buttonText: { fontWeight: '600', fontSize: 14, color: '#000' },
-    iconButton: {
-        backgroundColor: '#E5E5EA',
-        padding: 8,
-        borderRadius: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 36,
-    },
-});
 
 export default ProfileHeader;

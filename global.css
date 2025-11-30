@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --surface: #FFFFFF;
+        --surface-dark: #05060A;
+        --card: #FFFFFF;
+        --card-dark: #171821;
+        --border: #E5E5EA;
+        --border-dark: #2B2C33;
+        --text-primary: #0B0B0F;
+        --text-secondary: #8E8E93;
+    }
+}
+
+@layer utilities {
+    .bg-surface {
+        @apply bg-[color:var(--surface)] dark:bg-[color:var(--surface-dark)];
+    }
+    .bg-card {
+        @apply bg-[color:var(--card)] dark:bg-[color:var(--card-dark)];
+    }
+    .text-primary {
+        @apply text-[color:var(--text-primary)] dark:text-white;
+    }
+    .text-secondary {
+        @apply text-[color:var(--text-secondary)] dark:text-slate-400;
+    }
+    .border-default {
+        @apply border-[color:var(--border)] dark:border-[color:var(--border-dark)];
+    }
+}
